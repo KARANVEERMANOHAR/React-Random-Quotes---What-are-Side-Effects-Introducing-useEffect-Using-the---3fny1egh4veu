@@ -1,7 +1,6 @@
 import React from "react";
 import { useState,useEffect } from "react";
 import "../styles/App.css";
-import axios from "axios";
 
 var colors = [
   "#16a085",
@@ -15,42 +14,45 @@ var colors = [
   "#472E32",
   "#BDBB99",
   "#77B1A9",
-  "#73A857",
+  "#73A857"
 ];
 
 const App = () => {
-  const [content, setContent] = useState("");
+  const [text, setText] = useState("");
   const [author, setAuthor] = useState("");
+  
+  useEffect(()=>{
+  fetch("https://api.quotable.io/random")
+      .then((res) => res.json())
+      .then((data) => {
+        setText(data.content);
+        setAuthor(data.author);})}
+  ,[])
 
 
-
-  const getData = () => {
-        axios.get("https://api.quotable.io/random").then((data) => {
-      setContent(data.data.content);
-      setAuthor(data.data.author);
-          document.getElementsByTagName("body")[0].style.backgroundColor =
-      colors[parseInt(Math.random() * 10)];
-    });
-    
+  const fetchQ = () => {
+    fetch("https://api.quotable.io/random")
+      .then((res) => res.json())
+      .then((data) => {
+        setText(data.content);
+        setAuthor(data.author);
+        document.getElementsByTagName("body")[0].style.backgroundColor =
+          colors[parseInt(Math.random() * 10)];
+      });
   };
-
-  useEffect(() => {
-    getData()
-  }, []);
 
   return (
     <div id="main">
       <div id="wrapper">
-        <div className="quote-text" style={{color:"#16a085"}}>{content}</div>
-        <div className="quote-author" style={{color:"#16a085"}}>{author}</div>
-        <button
-          id="new-quote"
-          onClick={() => {
-            getData();
-          }}
-        >
-          New Quote
-        </button>
+        <div id="quote-box">
+          <div className="quote-text">{text}</div>
+          <div className="quote-author">{author}</div>
+          <div className="buttons">
+            <button className="button" id="new-quote" onClick={fetchQ}>
+              Click
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
