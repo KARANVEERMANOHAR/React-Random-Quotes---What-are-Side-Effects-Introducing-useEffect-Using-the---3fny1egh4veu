@@ -28,7 +28,10 @@ const App = () => {
         axios.get("https://api.quotable.io/random").then((data) => {
       setContent(data.data.content);
       setAuthor(data.data.author);
+          document.getElementsByTagName("body")[0].style.backgroundColor =
+      colors[parseInt(Math.random() * 10)];
     });
+    
   };
 
   useEffect(() => {
